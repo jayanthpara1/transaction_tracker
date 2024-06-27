@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .btn {
+            background-color: #4CAF50;
+            font-size: 30px;
+            margin-left: 46%;
+            width: 160px; /* Increased width */
+            height: 40px; /* Increased height */
+            color: white;
+            
+            padding-bottom: 5px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+            text-decoration: none;
+            display: inline-block; /* Ensures the button behaves as a block element */
+            text-align: center; /* Centers the text horizontally */
+            line-height: 45px; /* Centers the text vertically */
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <br>
+    <br>
+    <h1 style="text-align: center;">ERROR 420</h1>
+    
+    <br>
+    <br>
+    <h3 style="text-align: center;">Error code 402 recall  required </h1>
+    <h3 style="text-align: center;">Please login again from here </h1>
+    <br>
+
+    <a href="{{ url_for('login') }}" class="btn">Login</a>
+    
+</body>
+</html>

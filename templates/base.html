@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My App{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #buffering-image {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('a').click(function(e) {
+                e.preventDefault();
+                $('#buffering-image').show();
+                var href = $(this).attr('href');
+                setTimeout(function() { window.location = href }, 1000); // Add delay for demonstration
+            });
+            $('form').submit(function() {
+                $('#buffering-image').show();
+            });
+        });
+    </script>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <img id="buffering-image" src="{{ url_for('static', filename='buffer_image.png') }}" alt="Buffering...">
+    {% block content %}{% endblock %}
+</body>
+</html>

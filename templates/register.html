@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            background-image: url("{{ url_for('static', filename='peakpx1.jpg') }}");
+            background-size: cover;
+            background-position: center;
+        }
+        .banner {
+            background-color: rgb(137, 137, 105);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 50%;
+        }
+        .btn-container {
+            display: flex;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0.9;
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .gender {
+            margin-bottom: 15px;
+        }
+        .gender label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        input[type="radio"] {
+            vertical-align: middle;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        footer {
+            background-color: antiquewhite;
+            margin-top: 100px;
+            height: 20px;
+            padding: 10px;
+            text-align: center;
+        }
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .container.dark-mode {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+        }
+        input[type="text"].dark-mode,
+        input[type="email"].dark-mode,
+        input[type="password"].dark-mode {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: #fff;
+            border: 1px solid #fff;
+        }
+        input[type="text"].dark-mode:focus,
+        input[type="email"].dark-mode:focus,
+        input[type="password"].dark-mode:focus {
+            color: #000000;
+        }
+        input[type="submit"].dark-mode {
+            background-color: #FF0000;
+            color: #ffffff;
+        }
+        input[type="submit"].dark-mode:hover {
+            background-color: #8B0000;
+        }
+        .banner.dark-mode {
+            background-color: #000000;
+            color: rgb(255, 255, 255);
+        }
+        .btn.dark-mode {
+            background-color: #ff0000;
+        }
+        .btn.dark-mode:hover {
+            background-color: #193b1b;
+        }
+        footer.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+        .dark-mode-switch {
+            position: absolute;
+            top: 140px;
+            right: 20px;
+            z-index: 10;
+        }
+        /* Smaller slide switch styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .login-link a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        /* Error message styles */
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner light-mode">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Logo" style="max-width: 100%; height: 80px; border-radius:30%;">
+        </div>
+        <h1>Transaction Tracker</h1>
+        <div class="btn-container">
+            <a href="{{ url_for('index') }}" class="btn light-mode">Home</a>
+            <a href="{{ url_for('register') }}" class="btn light-mode">Register</a>
+            <a href="{{ url_for('login') }}" class="btn light-mode">Login</a>
+        </div>
+    </div>
+
+    <div class="container light-mode">
+        <h1>Registration Form</h1>
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        <form action="{{ url_for('register') }}" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required class="light-mode" value="{{ submitted_name }}"><br>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required class="light-mode" value="{{ submitted_email }}"><br>
+
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" required class="light-mode" value="{{ submitted_phone }}"><br>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required class="light-mode" value="{{ submitted_city }}"><br>
+
+            <div class="gender">
+                <label for="gender">Gender:</label><br>
+                <input type="radio" id="male" name="gender" value="male" required class="light-mode">
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="female" required class="light-mode">
+                <label for="female">Female</label>
+            </div>
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required class="light-mode" value="{{ submitted_username }}"><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required class="light-mode"><br>
+
+            <input type="submit" value="Register" class="light-mode">
+        </form>
+        <div class="login-link">
+            <a href="{{ url_for('login') }}">Already have an account? Login</a>
+        </div>
+    </div>
+
+    <footer class="light-mode">© All rights reserved under IPC section 420 copyright 2021</footer>
+
+    <!-- Dark Mode Switch -->
+    <div class="dark-mode-switch">
+        <label for="dark-mode-toggle">Dark Mode</label>
+        <label class="switch">
+            <input type="checkbox" id="dark-mode-toggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <!-- Script for Dark Mode Toggle -->
+    <script>
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+
+        // Check if dark mode is enabled in local storage
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            enableDarkMode();
+        }
+
+        darkModeToggle.addEventListener('change', () => {
+            if (darkModeToggle.checked) {
+                enableDarkMode();
+            } else {
+                disableDarkMode();
+            }
+        });
+
+        function enableDarkMode() {
+            body.classList.add('dark-mode');
+            const lightModeElements = document.querySelectorAll('.light-mode');
+            lightModeElements.forEach(el => {
+                el.classList.add('dark-mode');
+                el.classList.remove('light-mode');
+            });
+            localStorage.setItem('darkMode', 'enabled');
+            darkModeToggle.checked = true;
+        }
+
+        function disableDarkMode() {
+            body.classList.remove('dark-mode');
+            const darkModeElements = document.querySelectorAll('.dark-mode');
+            darkModeElements.forEach(el => {
+                el.classList.add('light-mode');
+                el.classList.remove('dark-mode');
+            });
+            localStorage.setItem('darkMode', 'disabled');
+            darkModeToggle.checked = false;
+        }
+    </script>
+</body>
+</html>

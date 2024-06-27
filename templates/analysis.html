@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        h1 {
+            grid-column: span 2;
+            text-align: center;
+            color: #343a40;
+        }
+        .logout-button {
+            text-align: right;
+            grid-column: span 2;
+        }
+        .logout-button button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .chart-container {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logout-button">
+            
+            <form action="{{ url_for('logout') }}" >
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+        <h1>Transaction Analysis</h1>
+        <div class="chart-container">
+            <h2>Transaction Amount by Date</h2>
+            <canvas id="dateAmountChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h2>Transaction Amount by Purpose</h2>
+            <canvas id="purposeAmountChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h2>Transaction Amount by Time</h2>
+            <canvas id="timeAmountChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h2>Transaction Amount by Day of the Week</h2>
+            <canvas id="dayAmountChart"></canvas>
+        </div>
+    </div>
+    <script>
+        // Data for amount by date (bar chart)
+        var dateAmountCtx = document.getElementById('dateAmountChart').getContext('2d');
+        var dateAmountChart = new Chart(dateAmountCtx, {
+            type: 'bar',
+            data: {{ date_amount_chart_data | tojson }},
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'category',
+                        labels: {{ date_amount_chart_data.labels | tojson }},
+                        beginAtZero: true,
+                        ticks: {
+                            autoSkip: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Data for amount by purpose (pie chart)
+        var purposeAmountCtx = document.getElementById('purposeAmountChart').getContext('2d');
+        var purposeAmountChart = new Chart(purposeAmountCtx, {
+            type: 'pie',
+            data: {{ purpose_amount_chart_data | tojson }},
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Data for amount by time (line chart)
+        var timeAmountCtx = document.getElementById('timeAmountChart').getContext('2d');
+        var timeAmountChart = new Chart(timeAmountCtx, {
+            type: 'line',
+            data: {{ time_amount_chart_data | tojson }},
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'category',
+                        labels: {{ time_amount_chart_data.labels | tojson }}
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Data for amount by day of the week (horizontal bar chart)
+        var dayAmountCtx = document.getElementById('dayAmountChart').getContext('2d');
+        var dayAmountChart = new Chart(dayAmountCtx, {
+            type: 'bar',
+            data: {{ day_amount_chart_data | tojson }},
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        type: 'category',
+                        labels: {{ day_amount_chart_data.labels | tojson }}
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

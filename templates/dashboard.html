@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .profile-button {
+            position: relative;
+            display: inline-block;
+        }
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .profile-dropdown a {
+            color: #333;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: block;
+        }
+        .profile-dropdown a:hover {
+            background-color: #f4f4f4;
+        }
+        .profile-button:hover .profile-dropdown {
+            display: block;
+        }
+        h2 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        h3 {
+            margin-top: 30px;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+        form {
+            margin-bottom: 30px;
+        }
+        .transaction {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        input[type="number"],
+        input[type="time"],
+        input[type="date"],
+        input[type="text"] {
+            flex: 1 1 18%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button[type="button"] {
+            background-color: #007bff;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button[type="button"]:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        a {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        /* Modal styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; 
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-header {
+            display: flex;
+            align-items: center;
+        }
+        .modal-header i {
+            color: #f44336;
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        .modal-header h2 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Welcome, {{ username }}</h2>
+            <div class="profile-button">
+                <button>{{ username }} <i class="fas fa-caret-down"></i></button>
+                <div class="profile-dropdown">
+                    <a href="#">{{ username }}</a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </div>
+        </div>
+        <h3>Add Transactions</h3>
+        <form action="http://127.0.0.1:5000/dashboard" method="post">
+            <div id="transactions">
+                <div class="transaction">
+                    <input type="number" name="amount[]" placeholder="Amount" required>
+                    <input type="time" name="time[]" required>
+                    <input type="date" name="date[]" required>
+                    <input type="text" name="place[]" placeholder="Place" required>
+                    <input type="text" name="purpose[]" placeholder="Purpose" required>
+                </div>
+            </div>
+            <button type="button" onclick="addTransaction()">Add More</button>
+            <button type="submit">Submit Transactions</button>
+        </form>
+        <h3>Your Transactions:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Time</th>
+                    <th>Date</th>
+                    <th>Place</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.time }}</td>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.place }}</td>
+                    <td>{{ transaction.purpose }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('analysis') }}" class="btn">Get Analysis</a>
+    </div>
+
+    <!-- Modal -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <i class="fas fa-exclamation-circle"></i>
+                <h2>Error</h2>
+            </div>
+            <p>Please complete the previous transaction before adding a new one.</p>
+        </div>
+    </div>
+
+    <script>
+        function addTransaction() {
+            var transactionsDiv = document.getElementById('transactions');
+            var lastTransaction = transactionsDiv.lastElementChild;
+            var inputs = lastTransaction.getElementsByTagName('input');
+            var isComplete = true;
+
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].value === '') {
+                    isComplete = false;
+                    break;
+                }
+            }
+
+            if (isComplete) {
+                var transactionDiv = document.createElement('div');
+                transactionDiv.className = 'transaction';
+                transactionDiv.innerHTML = `
+                    <input type="number" name="amount[]" placeholder="Amount" required>
+                    <input type="time" name="time[]" required>
+                    <input type="date" name="date[]" required>
+                    <input type="text" name="place[]" placeholder="Place" required>
+                    <input type="text" name="purpose[]" placeholder="Purpose" required>
+                    <button type="button" onclick="removeTransaction(this)" style="background-color: #f44336;">Remove</button>
+                `;
+                transactionsDiv.appendChild(transactionDiv);
+            } else {
+                showModal();
+            }
+        }
+
+        function removeTransaction(button) {
+            button.parentElement.remove();
+        }
+
+        function showModal() {
+            var modal = document.getElementById("errorModal");
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("errorModal");
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            var modal = document.getElementById("errorModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
